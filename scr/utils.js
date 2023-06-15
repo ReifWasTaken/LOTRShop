@@ -14,7 +14,7 @@ export async function connectMongo() {
   try {
     await connect(
       
-      "mongodb+srv://gregodelgado182:3ue44LfjRTorjQuQ@lotrshop.xmat6zi.mongodb.net/?retryWrites=true&w=majority"
+      "mongodb+srv://gregodelgado182:3ue44LfjRTorjQuQ@lotrshop.xmat6zi.mongodb.net/LOTRShop"
       );
   console.log("conected to mongo");
   }
