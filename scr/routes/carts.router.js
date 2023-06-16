@@ -1,6 +1,6 @@
 import express from "express";
-import cartsManager from "../cartManager.js"
-import classProducts from "../productManager.js";
+import cartsManager from "../DAO/cartManager.js"
+import classProducts from "../DAO/productManager.js";
 const cartsRouter = express.Router();
 const cartManager = new cartsManager();
 const productManager = new classProducts();

@@ -1,14 +1,14 @@
 import express from "express"
-import classProducts from "../productManager.js";
-import { ProductModel } from "../models/products.model.js"
+import ProductsService from "../services/products.service.js";
 const productsRouter = express.Router();
-const productManager = new classProducts();
+const productService = new ProductsService();
 
-
+//-------------------------------------------------------------------------------------------
 productsRouter.get("/", async (req, res) => {
   try{
   const limit = req.query.limit;
-  const products = await ProductModel.find({});
+   
+  const products = await productService.getAllProducts();
   
   if(limit){
     return res.status(200).json({
@@ -33,26 +33,13 @@ catch(err){
 }
 });
 
+//-------------------------------------------------------------------------------------------
+
 productsRouter.post("/", async (req, res)=>{
   try{
   const newProduct =  req.body;
-
-    if(
-      !newProduct.title ||
-      !newProduct.description ||
-      !newProduct.price ||
-      !newProduct.thumbnail ||
-      !newProduct.code ||
-      !newProduct.stock ||
-      !newProduct.category){
-
-        return res.status(400).json({
-        status: "error",
-        msg: "some data is missing"
-        });
-    }
-
-  await ProductModel.create({...newProduct});
+    
+  await productService.productsCreation(newProduct)
   
   return res.status(201).json({
     status: "succes",
@@ -70,20 +57,19 @@ catch(err){
 }
 });
 
+//-------------------------------------------------------------------------------------------
 
 productsRouter.get("/:pid", async (req, res) => {
   try{
   const solicitedID = req.params.pid; 
-  const productFound = await ProductModel.findById(solicitedID);
 
-  if(productFound){     
+  const productFound = await productService.getProductByID(solicitedID);
+
     return res.status(200).json({
     status: "success",
     msg: "Product info",
     data: productFound,
     });  
-  }
-
 }
 
 catch(err){   
@@ -95,27 +81,20 @@ catch(err){
 
 });
 
+//-------------------------------------------------------------------------------------------
+
 productsRouter.put("/:pid", async (req, res)=>{
   try{
     const solicitedID = req.params.pid; 
     const newProduct =  req.body;
 
-    if(newProduct.id){
-      return  res.status(404).json({
-        status: "error",
-        msg: "Product's ID cant be updated",
-      });
-
-    }
-    if(solicitedID){
-      await ProductModel.updateOne({_id : solicitedID}, {...newProduct});
+    const toBeUpdated = await productService.productsUpdate(solicitedID, newProduct);
       
       return res.status(201).json({
         status: "success",
         msg: "product updated succesfuly",
-        data: newProduct
+        data: toBeUpdated
       })
-    }
 
   }
   catch{
@@ -126,18 +105,14 @@ productsRouter.put("/:pid", async (req, res)=>{
   }
 })
 
+//-------------------------------------------------------------------------------------------
+
 productsRouter.delete("/:pid", async (req, res)=> {
   try{
     const solicitedID = req.params.pid; 
-    const productFound = await ProductModel.deleteOne({ _id: solicitedID});
+   
+    const productFound = await productService.productsDelete(solicitedID);
 
-    if(!productFound){
-      return  res.status(404).json({
-        status: "error",
-        msg: "Product does not exist",
-      });
-
-    }
     return res.status(200).json({
       status: "success",
       msg: "the products has been deleted",
@@ -153,7 +128,9 @@ productsRouter.delete("/:pid", async (req, res)=> {
     })};
   })
 
-productsRouter.get("/:pid/test", async (req, res) => {
+//-------------------------------------------------------------------------------------------
+
+/* productsRouter.get("/:pid/test", async (req, res) => {
   try{
   const solicitedID = req.params.pid; 
   const productFound = await ProductModel.findById(solicitedID);
@@ -171,6 +148,6 @@ catch(err){
   });
 }
 
-});
+}); */
 
 export {productsRouter};

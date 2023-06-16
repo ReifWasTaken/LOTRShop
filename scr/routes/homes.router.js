@@ -1,5 +1,5 @@
 import express from "express"
-import classProductsHome from "../productManager.js";
+import classProductsHome from "../DAO/productManager.js";
 const homesRouter = express.Router();
 const productManagerhome = new classProductsHome();
 
