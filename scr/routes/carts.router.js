@@ -1,15 +1,14 @@
 import express from "express";
-import cartsManager from "../DAO/cartManager.js"
-import classProducts from "../DAO/productManager.js";
+import CartService from "../services/carts.service.js";
+const cartServices = new CartService();
 const cartsRouter = express.Router();
-const cartManager = new cartsManager();
-const productManager = new classProducts();
+
+
 
 
 cartsRouter.post("/", async (req, res)=>{
     try{
-        const newCreation = await cartManager.newCart();
-        
+        const newCreation = await cartServices.cartCreation();
         return res.status(201).json({
             status: "success",
             msg: "cart created",
@@ -26,14 +25,15 @@ cartsRouter.post("/", async (req, res)=>{
 
 cartsRouter.get("/:cid", async (req, res)=>{
     try{
-        const solicitedID = req.params.cid;
-        const cartFound = await cartManager.getCartById(parseInt(solicitedID));
-
+      const solicitedID = req.params.cid;
+      
+      const cartFound = await cartServices.getCartByID(solicitedID);
+     
           if(cartFound){
            
             return res.status(201).json({
               status: "success",
-              msg: "Cart updated succesfuly",
+              msg: "Cart found succesfuly",
               data: cartFound,
             })
           }
@@ -49,45 +49,22 @@ cartsRouter.get("/:cid", async (req, res)=>{
 })
 
 cartsRouter.post("/:cid/product/:pid", async (req, res)=>{
-    try{
-      const cartFound = await cartManager.getCart();
-      const productFound = await productManager.getProducts();
-      
-      
-        const solicitedCartID = parseInt(req.params.cid);
-        const solicitedProductID = parseInt(req.params.pid);
-
-        const carrito = cartFound.find(e => e.id === solicitedCartID);
-        
-        if(!carrito){
-          return res.status(404).json({
-            status: "error",
-            msg: "Cart not found",
-          })
-        }
-
-        const producto = productFound.find(e => e.id === solicitedProductID);
-        
-        if(!producto){
-          return res.status(404).json({
-            status: "error",
-            msg: "product not found",
-          })
-        }
-        
-
-        if(carrito && producto){
-           await cartManager.updateCart(carrito.id, producto.id);
+  try{
+    const solicitedCartID = req.params.cid;
+    const solicitedProductID = req.params.pid;
+    const solicitedQuantity = req.body.quantity;
+ 
+    const carrito = await cartServices.addProductToCart(solicitedCartID, solicitedProductID, solicitedQuantity);  
 
             return res.status(201).json({
                 status: "success",
                 msg: "cart updated",
                 data: carrito,
             })
-        }
-
+        
     }
     catch(err){
+      console.log(err);
         return  res.status(404).json({
             status: "error",
             msg: "error adding the product to the cart",
@@ -95,7 +72,7 @@ cartsRouter.post("/:cid/product/:pid", async (req, res)=>{
     }
 });
 
-cartsRouter.get("/:cid/test", async (req, res)=>{
+/* cartsRouter.get("/:cid/test", async (req, res)=>{
   try{
       const solicitedID = req.params.cid;
       const cartFound = await cartManager.getCartById(parseInt(solicitedID));
@@ -113,5 +90,5 @@ cartsRouter.get("/:cid/test", async (req, res)=>{
         });
       }
   
-})
+}) */
 export {cartsRouter};

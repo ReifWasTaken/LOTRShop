@@ -9,6 +9,7 @@ class ProductsService {
         const products = await ProductModel.find({});
         return products;
     }
+
 //-------------------------------------------------------------------------------------------
     async productsValidation(newProduct) {
         if (
@@ -25,6 +26,7 @@ class ProductsService {
             throw new Error("Something is missing");
         }
     }
+
 //-------------------------------------------------------------------------------------------
     async productsCreation(newProduct) {
 
@@ -34,6 +36,7 @@ class ProductsService {
 
         return newProduct;
     }
+
 //-------------------------------------------------------------------------------------------
     async productsDelete(solicitedID) {
 
@@ -41,6 +44,7 @@ class ProductsService {
 
         return productFound;
     }
+
 //-------------------------------------------------------------------------------------------
     async productsUpdate(solicitedID, newProduct) {
 
@@ -55,6 +59,7 @@ class ProductsService {
         if (solicitedID)
             await ProductModel.updateOne({ _id: solicitedID }, { ...newProduct });
     }
+
 //-------------------------------------------------------------------------------------------
     async getProductByID(solicitedID) {
 
@@ -67,6 +72,7 @@ class ProductsService {
         return productFound;
     }
 }
+
 
 
 export default ProductsService;

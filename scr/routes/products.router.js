@@ -1,7 +1,7 @@
 import express from "express"
 import ProductsService from "../services/products.service.js";
-const productsRouter = express.Router();
 const productService = new ProductsService();
+const productsRouter = express.Router();
 
 //-------------------------------------------------------------------------------------------
 productsRouter.get("/", async (req, res) => {

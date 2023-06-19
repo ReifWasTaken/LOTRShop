@@ -1,28 +1,36 @@
 import express from "express"
-import classProductsHome from "../DAO/productManager.js";
+import ProductsService from "../services/products.service.js";
 const homesRouter = express.Router();
-const productManagerhome = new classProductsHome();
+const homeService = new ProductsService();
 
 
 homesRouter.get("/", async (req, res) => {
-    try{
-
-    const productsFound = await productManagerhome.getProducts();
-    
-    if(productsFound){
-      return res.status(200).render("homes", {products: productsFound});
-
-    }
-  }
+  try{
+  const limit = req.query.limit;
+   
+  const products = await homeService.getAllProducts();
   
-  catch(err){
-    return  res.status(404).json({
-      status: "error",
-      msg: "Product List does not exist",
-      data: {},
+  if(limit){
+    return res.status(200).json({
+    status: "success",
+    msg: "Product List",
+    data: (products.slice(0, limit))
+    });
+  }else{
+    return res.status(200).json({
+    status: "success",
+    msg: "Product List",
+    data: products,
     });
   }
+}
+catch(err){
+  return  res.status(404).json({
+    status: "error",
+    msg: "Product List does not exist",
+    data: {},
+  });
+}
 });
-
 
 export {homesRouter}
