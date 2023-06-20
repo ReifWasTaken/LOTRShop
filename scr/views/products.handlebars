@@ -1,13 +1,13 @@
-<div>
+<div  id="product" >
+    {{#each products}}
     <ul>
-    <h1>Product:{{{title}}}</h1>
-
-    <li>ID: {{{id}}}</li>
-    <li>description:{{{description}}}</li>
-    <li>price:{{{price}}}</li>
-    <li>thumbnail:{{{thumbnail}}}</li>
-    <li>code:{{{code}}}</li>
-    <li>stock{{{stock}}}</li>
-
+        <h1>Product: {{{this.title}}} </h1>
+        <li>ID: {{this.id}}</li>
+        <li>description:{{this.description}}</li>
+        <li>price:{{this.price}}</li>
+        <li>thumbnail:{{this.thumbnail}}</li>
+        <li>stock:{{this.stock}}</li>
+        <button id="delete" type="submit" onclick="deleteButton({{this.id}})">X</button>
     </ul>
+    {{/each}}
 </div>

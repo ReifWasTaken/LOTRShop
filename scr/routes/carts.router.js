@@ -72,23 +72,26 @@ cartsRouter.post("/:cid/product/:pid", async (req, res)=>{
     }
 });
 
-/* cartsRouter.get("/:cid/test", async (req, res)=>{
+cartsRouter.delete("/:cid/product/:pid", async (req,res)=>{
   try{
-      const solicitedID = req.params.cid;
-      const cartFound = await cartManager.getCartById(parseInt(solicitedID));
+    const solicitedCartID = req.params.cid;
+    const solicitedProductID = req.params.pid;
 
-        if(cartFound){
-         
-          return res.status(201).render("carts", cartFound);
-        }
-    
-      }
-      catch{
-        return  res.status(404).json({
+    const carrito = await cartServices.removeProductFromCart(solicitedCartID, solicitedProductID);  
+
+    return res.status(201).json({
+        status: "success",
+        msg: "cart updated",
+        data: carrito,
+    })
+  }
+  catch(err){
+    console.log(err);
+      return  res.status(404).json({
           status: "error",
-          msg: "Cart does not exist",
+          msg: "error deleting cart product",
         });
-      }
-  
-}) */
+  }
+})
+
 export {cartsRouter};

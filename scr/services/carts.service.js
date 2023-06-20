@@ -47,6 +47,42 @@ class CartService {
             return updateCart;
         }
     }
+//-------------------------------------------------------------------------------------------
+
+    async removeProductFromCart(solicitedCartID, solicitedProductID){
+        const cartFound = await cartModel.findOne({_id: solicitedCartID});
+
+        if(!cartFound){
+            throw new Error("Cart not found");
+        }
+
+        const productFound = await ProductModel.findById({_id: solicitedProductID});
+        
+        if(!productFound){
+            throw new Error ("Product not found");
+        }
+        
+        
+  /*      console.log(productFound)
+        console.log(cartFound)
+        console.log(typeof(productFound)) */
+        const index = cartFound.products.find(products => products._id === productFound.product);
+        /* JSON.stringify(index) */
+        console.log(typeof(index))
+        console.log(index)
+        if(index === -1){
+            throw new Error ("Product is not in the cart");
+        }
+
+        console.log(index)
+        
+/*             cartFound.products.splice(index, 1)
+            const updateCart = await cartModel.updateOne({_id: solicitedCartID}, cartFound);
+            return updateCart; */
+        
+
+    }
+
 }
 
 export default CartService;

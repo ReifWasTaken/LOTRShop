@@ -4,9 +4,12 @@ import { ProductModel } from "../DAO/models/products.model.js";
 
 class ProductsService {
 //-------------------------------------------------------------------------------------------
-    async getAllProducts() {
+    async getAllProducts(limit, page, sort, query) {
 
-        const products = await ProductModel.find({});
+       
+
+        const products = await ProductModel.paginate({}, {});
+        console.log(products)
         return products;
     }
 
