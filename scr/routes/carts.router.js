@@ -48,7 +48,7 @@ cartsRouter.get("/:cid", async (req, res)=>{
     
 })
 
-cartsRouter.post("/:cid/product/:pid", async (req, res)=>{
+cartsRouter.put("/:cid/product/:pid", async (req, res)=>{
   try{
     const solicitedCartID = req.params.cid;
     const solicitedProductID = req.params.pid;
@@ -90,6 +90,29 @@ cartsRouter.delete("/:cid/product/:pid", async (req,res)=>{
       return  res.status(404).json({
           status: "error",
           msg: "error deleting cart product",
+        });
+  }
+})
+
+cartsRouter.put("/:cid", async (req,res)=>{
+  try{
+    const solicitedCartID = req.params.cid;
+    const toBeModify = req.body;
+
+    const cart = await cartServices.modifyCart(solicitedCartID, toBeModify);
+
+    return res.status(201).json({
+      status: "succes",
+      msg: "cart updated",
+      data: cart,
+    })
+
+  }
+  catch(err){
+    console.log(err);
+      return  res.status(404).json({
+          status: "error",
+          msg: "error modifying the cart",
         });
   }
 })

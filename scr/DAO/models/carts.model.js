@@ -2,10 +2,8 @@ import { Schema, model } from "mongoose";
 
 const cartSchema = new Schema({
 
-    products:{
-        type: [
-            {
-            products: {
+    products:[{    
+            productId: {
                 type: Schema.Types.ObjectId,
                 ref: "products",
                 requiered: true
@@ -13,7 +11,6 @@ const cartSchema = new Schema({
             quantity:{type: Number, requiered: true, min: 1, default: 0},
             _id: false
         }],
-    },
 });
 
 /* cartSchema.pre("findById", function (){
