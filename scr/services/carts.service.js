@@ -24,7 +24,7 @@ class CartService {
     }
 //-------------------------------------------------------------------------------------------
 
-    async addProductToCart(solicitedCartID, solicitedProductID, solicitedQuantity){
+    async addProductToCart(solicitedCartID, solicitedProductID){
 
         const cartFound = await cartModel.findById({_id: solicitedCartID});
 
@@ -34,18 +34,21 @@ class CartService {
 
         const productFound = await ProductModel.findById({_id: solicitedProductID});
         
-                if(!productFound){
-            throw new Error ("Product not found");
+        if(!productFound){
+            throw new Error("Product not found");
         }
 
-        parseInt(solicitedQuantity)
-  
+        const index = cartFound.products.findIndex(prod => prod.productId._id.toString() === solicitedProductID);
         
-        if(cartFound && productFound){
-            cartFound.products.push({productId: productFound._id, quantity: solicitedQuantity});
-            const updateCart = await cartModel.updateOne({_id: solicitedCartID}, cartFound);
-            return updateCart;
+        if(index === -1){
+        cartFound.products.push({productId: productFound._id})
+        return await cartFound.save();
         }
+        
+
+        cartFound.products[index].quantity +=1;
+        return await cartFound.save();
+
     }
 //-------------------------------------------------------------------------------------------
 
@@ -56,29 +59,11 @@ class CartService {
             throw new Error("Cart not found");
         }
 
- /*        const productFound = await ProductModel.findById({_id: solicitedProductID});
-        
-        if(!productFound){
-            throw new Error ("Product not found");
-
-        
-        
-       console.log(solicitedProductID)
-        console.log(cartFound)
-        console.log(typeof(solicitedProductID)) */
         const index = await cartFound.products.findIndex(products => products.productId._id.toString() === solicitedProductID);
-/*          JSON.parse(index) */
-/*         console.log(typeof(index))
-        console.log(index)
-        if(index === -1){
-            throw new Error ("Product is not in the cart");
-        }
-
-        console.log(index) */
         
-            cartFound.products.splice(index, 1)
-            const updateCart = await cartModel.updateOne({_id: solicitedCartID}, cartFound);
-            return updateCart;
+        cartFound.products.splice(index, 1)
+        const updateCart = await cartModel.updateOne({_id: solicitedCartID}, cartFound);
+        return updateCart;
         
 
     }
@@ -86,12 +71,43 @@ class CartService {
 
     async modifyCart(solicitedCartID, toBeModify){
 
-        const cartFound = await cartModel.findByIdAndUpdate({_id: solicitedCartID}, []);
+      
         
-        const updateCart = await cartModel.updateOne({_id: solicitedCartID}, cartFound);
+        const cartFound = await cartModel.findByIdAndUpdate(solicitedCartID, {$unset: {productId: 1}}, {new: true})
+
+        if(!cartFound){
+            throw new Error("Cart not found");
+        }
+
+        let cartAux = toBeModify;
+
+        console.log(cartAux);
+        
+        const updateCart = await cartModel.updateOne({_id: solicitedCartID}, cartAux);
         return updateCart;
 
     }
+//-------------------------------------------------------------------------------------------
+
+async modifyQuantity(solicitedCartID, solicitedProductID, solicitedQuantity){
+
+
+    const cart = await cartModel.findOneAndUpdate({_id: solicitedCartID}, {productId: solicitedProductID},
+        {$inc: {"productId.quantity": solicitedQuantity}},
+        {new: true}
+    )
+
+        console.log(cart)
+
+        const updateCart = await cartModel.updateOne({_id: solicitedCartID}, cart);
+
+    
+/*     if(cartFound && productFound){
+        cartFound.products.push({quantity: quantity + solicitedQuantity});
+        return updateCart;
+    } */
+}
+
 }
 
 export default CartService;

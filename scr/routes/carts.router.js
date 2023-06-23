@@ -52,9 +52,8 @@ cartsRouter.put("/:cid/product/:pid", async (req, res)=>{
   try{
     const solicitedCartID = req.params.cid;
     const solicitedProductID = req.params.pid;
-    const solicitedQuantity = req.body.quantity;
  
-    const carrito = await cartServices.addProductToCart(solicitedCartID, solicitedProductID, solicitedQuantity);  
+    const carrito = await cartServices.addProductToCart(solicitedCartID, solicitedProductID);  
 
             return res.status(201).json({
                 status: "success",
@@ -116,5 +115,29 @@ cartsRouter.put("/:cid", async (req,res)=>{
         });
   }
 })
+
+cartsRouter.put("/:cid/products/:pid", async (req, res)=>{
+  try{
+    const solicitedCartID = req.params.cid;
+    const solicitedProductID = req.params.pid;
+    const solicitedQuantity = req.body.quantity;
+ 
+    const carrito = await cartServices.modifyQuantity(solicitedCartID, solicitedProductID, solicitedQuantity);  
+
+            return res.status(201).json({
+                status: "success",
+                msg: "cart updated",
+                data: carrito,
+            })
+        
+    }
+    catch(err){
+      console.log(err);
+        return  res.status(404).json({
+            status: "error",
+            msg: "error adding the product to the cart",
+          });
+    }
+});
 
 export {cartsRouter};
