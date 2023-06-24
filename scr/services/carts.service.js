@@ -69,9 +69,7 @@ class CartService {
     }
 //-------------------------------------------------------------------------------------------
 
-    async modifyCart(solicitedCartID, toBeModify){
-
-      
+    async modifyCart(solicitedCartID, toBeModify){   
         
         const cartFound = await cartModel.findByIdAndUpdate(solicitedCartID, {$unset: {productId: 1}}, {new: true})
 
@@ -80,8 +78,6 @@ class CartService {
         }
 
         let cartAux = toBeModify;
-
-        console.log(cartAux);
         
         const updateCart = await cartModel.updateOne({_id: solicitedCartID}, cartAux);
         return updateCart;
@@ -91,23 +87,27 @@ class CartService {
 
 async modifyQuantity(solicitedCartID, solicitedProductID, solicitedQuantity){
 
+    const cartFound = await cartModel.findOne({_id: solicitedCartID}).populate("products.productId");
 
-    const cart = await cartModel.findOneAndUpdate({_id: solicitedCartID}, {productId: solicitedProductID},
-        {$inc: {"productId.quantity": solicitedQuantity}},
-        {new: true}
-    )
+    let prodCart = cartFound.products.find((item)=> item.productId._id.toString() === solicitedProductID)
 
-        console.log(cart)
+    prodCart.quantity = prodCart.quantity + solicitedQuantity;
 
-        const updateCart = await cartModel.updateOne({_id: solicitedCartID}, cart);
-
-    
-/*     if(cartFound && productFound){
-        cartFound.products.push({quantity: quantity + solicitedQuantity});
-        return updateCart;
-    } */
+    const updateCart = await cartModel.updateOne({_id: solicitedCartID}, cartFound);
+    return updateCart;
+ 
 }
+//-------------------------------------------------------------------------------------------
 
+async deleteAllProducts(solicitedCartID){
+
+    const cartFound = await cartModel.findOne({_id: solicitedCartID})
+
+    cartFound.products = []
+
+    const updateCart = await cartModel.updateOne({_id: solicitedCartID}, cartFound);
+    return updateCart;
+}
 }
 
 export default CartService;

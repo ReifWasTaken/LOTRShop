@@ -6,95 +6,95 @@ const cartsRouter = express.Router();
 
 
 
-cartsRouter.post("/", async (req, res)=>{
-    try{
-        const newCreation = await cartServices.cartCreation();
-        return res.status(201).json({
-            status: "success",
-            msg: "cart created",
-            data: newCreation,
-        });
-    }
-    catch(err){
-        return res.status(400).json({
-            status:"error",
-            msg: "cart can not be created",
-        });
-    }
+cartsRouter.post("/", async (req, res) => {
+  try {
+    const newCreation = await cartServices.cartCreation();
+    return res.status(201).json({
+      status: "success",
+      msg: "cart created",
+      data: newCreation,
+    });
+  }
+  catch (err) {
+    return res.status(400).json({
+      status: "error",
+      msg: "cart can not be created",
+    });
+  }
 })
 
-cartsRouter.get("/:cid", async (req, res)=>{
-    try{
-      const solicitedID = req.params.cid;
-      
-      const cartFound = await cartServices.getCartByID(solicitedID);
-     
-          if(cartFound){
-           
-            return res.status(201).json({
-              status: "success",
-              msg: "Cart found succesfuly",
-              data: cartFound,
-            })
-          }
-      
-        }
-        catch{
-          return  res.status(404).json({
-            status: "error",
-            msg: "Cart does not exist",
-          });
-        }
-    
+cartsRouter.get("/:cid", async (req, res) => {
+  try {
+    const solicitedID = req.params.cid;
+
+    const cartFound = await cartServices.getCartByID(solicitedID);
+
+    if (cartFound) {
+
+      return res.status(201).json({
+        status: "success",
+        msg: "Cart found succesfuly",
+        data: cartFound,
+      })
+    }
+
+  }
+  catch {
+    return res.status(404).json({
+      status: "error",
+      msg: "Cart does not exist",
+    });
+  }
+
 })
 
-cartsRouter.put("/:cid/product/:pid", async (req, res)=>{
-  try{
-    const solicitedCartID = req.params.cid;
-    const solicitedProductID = req.params.pid;
- 
-    const carrito = await cartServices.addProductToCart(solicitedCartID, solicitedProductID);  
-
-            return res.status(201).json({
-                status: "success",
-                msg: "cart updated",
-                data: carrito,
-            })
-        
-    }
-    catch(err){
-      console.log(err);
-        return  res.status(404).json({
-            status: "error",
-            msg: "error adding the product to the cart",
-          });
-    }
-});
-
-cartsRouter.delete("/:cid/product/:pid", async (req,res)=>{
-  try{
+cartsRouter.put("/:cid/product/:pid", async (req, res) => {
+  try {
     const solicitedCartID = req.params.cid;
     const solicitedProductID = req.params.pid;
 
-    const carrito = await cartServices.removeProductFromCart(solicitedCartID, solicitedProductID);  
+    const carrito = await cartServices.addProductToCart(solicitedCartID, solicitedProductID);
 
     return res.status(201).json({
-        status: "success",
-        msg: "cart updated",
-        data: carrito,
+      status: "success",
+      msg: "cart updated",
+      data: carrito,
+    })
+
+  }
+  catch (err) {
+    console.log(err);
+    return res.status(404).json({
+      status: "error",
+      msg: "error adding the product to the cart",
+    });
+  }
+});
+
+cartsRouter.delete("/:cid/product/:pid", async (req, res) => {//si
+  try {
+    const solicitedCartID = req.params.cid;
+    const solicitedProductID = req.params.pid;
+
+    const carrito = await cartServices.removeProductFromCart(solicitedCartID, solicitedProductID);
+
+    return res.status(201).json({
+      status: "success",
+      msg: "cart updated",
+      data: carrito,
     })
   }
-  catch(err){
+  catch (err) {
     console.log(err);
-      return  res.status(404).json({
-          status: "error",
-          msg: "error deleting cart product",
-        });
+    return res.status(404).json({
+      status: "error",
+      msg: "error deleting cart product",
+    });
   }
 })
 
-cartsRouter.put("/:cid", async (req,res)=>{
-  try{
+cartsRouter.put("/:cid", async (req, res) => {
+  try {
     const solicitedCartID = req.params.cid;
     const toBeModify = req.body;
 
@@ -107,37 +107,57 @@ cartsRouter.put("/:cid", async (req,res)=>{
     })
 
   }
-  catch(err){
+  catch (err) {
     console.log(err);
-      return  res.status(404).json({
-          status: "error",
-          msg: "error modifying the cart",
-        });
+    return res.status(404).json({
+      status: "error",
+      msg: "error modifying the cart",
+    });
   }
 })
 
-cartsRouter.put("/:cid/products/:pid", async (req, res)=>{
-  try{
+cartsRouter.put("/:cid/products/:pid", async (req, res) => {
+  try {
     const solicitedCartID = req.params.cid;
     const solicitedProductID = req.params.pid;
     const solicitedQuantity = req.body.quantity;
- 
-    const carrito = await cartServices.modifyQuantity(solicitedCartID, solicitedProductID, solicitedQuantity);  
 
-            return res.status(201).json({
-                status: "success",
-                msg: "cart updated",
-                data: carrito,
-            })
-        
-    }
-    catch(err){
-      console.log(err);
-        return  res.status(404).json({
-            status: "error",
-            msg: "error adding the product to the cart",
-          });
-    }
+    const carrito = await cartServices.modifyQuantity(solicitedCartID, solicitedProductID, solicitedQuantity);
+
+    return res.status(201).json({
+      status: "success",
+      msg: "cart updated",
+      data: carrito,
+    })
+
+  }
+  catch (err) {
+    console.log(err);
+    return res.status(404).json({
+      status: "error",
+      msg: "error adding the product to the cart",
+    });
+  }
 });
 
-export {cartsRouter};
+cartsRouter.delete("/:cid", async (req, res) => {
+  try {
+    const solicitedCartID = req.params.cid;
+
+    const cart = await cartServices.deleteAllProducts(solicitedCartID);
+
+    return res.status(200).json({
+      status:"succes",
+      msg: "cart updated",
+      data: cart,
+    })
+  }
+  catch (err) {
+    return res.status(404).json({
+      status: "error",
+      msg: "error deleting the cart content",
+    });
+  }
+})
+
+export { cartsRouter };
