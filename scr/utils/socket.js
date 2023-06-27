@@ -1,13 +1,16 @@
 
 import { Server } from "socket.io";
 import ProductManager from "../DAO/productManager.js";
+import ProductsService from "../services/products.service.js";
+import CartService from "../services/carts.service.js";
 
 
 export function connectSocket(httpServer) {
 
     const socketServer = new Server(httpServer);
 
-    const product = new ProductManager();
+    const product = new ProductsService(); 
+    const cart = new CartService();
 
     socketServer.on("connection", (socket) => {
         console.log("socket conected to " + socket.id);
@@ -42,6 +45,20 @@ export function connectSocket(httpServer) {
             }
             catch (err) {
                 console.log("error");
+            }
+        })
+
+        socket.on("add_product", async(data)=>{
+            try{
+                const _id = parseInt(data);
+                const productAdd = await product.getProductByID(_id)
+                console.log(data)
+                await cart.addProductToCart("6494e71d6f254e090bcc0fd3", productAdd);
+
+                socketServer.emit("",)
+            }
+            catch{
+                console.log("error")
             }
         })
     });

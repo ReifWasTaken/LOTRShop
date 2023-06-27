@@ -8,7 +8,7 @@ homesRouter.get("/", async (req, res) => {
   try{
   const limit = req.query.limit;
    
-  const products = await homeService.getAllProducts();
+  const products = await homeService.gatCartById();
   
   if(limit){
     return res.status(200).json({

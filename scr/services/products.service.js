@@ -4,13 +4,32 @@ import { ProductModel } from "../DAO/models/products.model.js";
 
 class ProductsService {
 //-------------------------------------------------------------------------------------------
-    async getAllProducts(limit, page, sort, query) {
+    async getAllProducts(limit, pages, sort, query) {
 
-       
+        const filter = query? { title: { $regex: query.prod, $options: "i" } }: {};
 
-        const products = await ProductModel.paginate({}, {});
-        console.log(products)
-        return products;
+        const queryResults = await ProductModel.paginate(filter, {
+        limit: limit || 3,
+        page: pages || 1,
+        sort: sort || {},
+        lean: true,
+      });
+
+        const {docs, ...rest} = queryResults;
+
+        let products = docs.map(doc =>{
+            return{
+            _id: doc._id,
+            title: doc.title,
+            description: doc.description,
+            price: doc.price,
+            thumbnail: doc.thumbnail,
+            code: doc.code,
+            stock: doc.stock,
+            category: doc.category,}
+        })
+
+        return {products, pagination: rest};
     }
 
 //-------------------------------------------------------------------------------------------

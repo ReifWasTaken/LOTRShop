@@ -2,12 +2,28 @@
     {{#each products}}
     <ul>
         <h1>Product: {{{this.title}}} </h1>
-        <li>ID: {{this.id}}</li>
+        <li>ID: {{this._id}}</li>
         <li>description:{{this.description}}</li>
         <li>price:{{this.price}}</li>
         <li>thumbnail:{{this.thumbnail}}</li>
         <li>stock:{{this.stock}}</li>
-        <button id="delete" type="submit" onclick="deleteButton({{this.id}})">X</button>
+        <li>category:{{this.category}}</li>
+        <button id="AddCart" type="submit" onclick="AddToCart({{this._id}})">Add To Cart</button>
     </ul>
     {{/each}}
+
+    {{#if pagination.prevPage}}
+    <a href="?page={{pagination.prevPage}}">⏪{{pagination.prevPage}}</a>
+    {{/if}}
+
+    <a>page: {{pagination.page}}</a> 
+
+    {{#if pagination.nextPage}}
+    <a href="?page={{pagination.nextPage}}">⏩{{pagination.nextPage}}</a>
+    {{/if}}
 </div>
+  
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="../public/js/index.js"></script>

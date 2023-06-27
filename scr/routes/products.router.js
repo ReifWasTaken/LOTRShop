@@ -7,24 +7,16 @@ const productsRouter = express.Router();
 productsRouter.get("/", async (req, res) => {
   try{
     const limit = req.query.limit
-    const page = req.query.page
+    const pages = req.query.page
     const sort = req.query.sort
     const query = req.query.query
    
-  const products = await productService.getAllProducts(limit, page, sort, query);
+  const {products, pagination} = await productService.getAllProducts(limit, pages, sort, query);
   
-  if(limit || page || sort || query){
-    return res.status(200).json({
-    status: "success",
-    msg: "Product List",
-    data: {...products}
-    });
+  if(products){
+    return res.status(200).render("products", {products, pagination});
   }else{
-    return res.status(200).json({
-    status: "success",
-    msg: "Product List",
-    data: products,
-    });
+    res.status(200).json({ status: "success", payload: [] });
   }
 }
 catch(err){

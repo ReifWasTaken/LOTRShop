@@ -61,6 +61,16 @@ formu.addEventListener("submit", (e)=>{
 
         socket.emit("delete_product", IDProd);
     }
+
+     AddToCart = (IDProd) => {
+
+        localStorage.setItem("IDCart", "6494e71d6f254e090bcc0fd3")
+
+        fetch(`/carts/${IDCart}/products/${IDProd}`, {
+            method: "PUT"})
+        };
+
+    
     
 
 
