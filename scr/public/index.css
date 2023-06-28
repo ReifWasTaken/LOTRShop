@@ -1,3 +1,5 @@
+
+
 ul li {
     list-style: none;
     list-style-type: none;
@@ -6,7 +8,8 @@ ul li {
     text-transform: uppercase;
     background-color: rgba(245, 245, 245, 0.959);
     border: 0.3rem solid whitesmoke;
-    border-radius: 2rem; }
+    border-radius: 2rem;
+ }
 
 form {
     display: inline-block;

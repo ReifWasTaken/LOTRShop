@@ -8,7 +8,7 @@
         <li>thumbnail:{{this.thumbnail}}</li>
         <li>stock:{{this.stock}}</li>
         <li>category:{{this.category}}</li>
-        <button id="AddCart" type="submit" onclick="AddToCart({{this._id}})">Add To Cart</button>
+        <button id="AddCart" type="submit" onclick="addToCart({{this._id}})">Add To Cart</button>
     </ul>
     {{/each}}
 
@@ -25,5 +25,4 @@
   
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
-<script src="/socket.io/socket.io.js"></script>
-<script src="../public/js/index.js"></script>
+<script src="/scr/public/js/index.js"></script>
