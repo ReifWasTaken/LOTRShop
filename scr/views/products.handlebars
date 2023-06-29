@@ -2,13 +2,12 @@
     {{#each products}}
     <ul>
         <h1>Product: {{{this.title}}} </h1>
-        <li>ID: {{this._id}}</li>
         <li>description:{{this.description}}</li>
         <li>price:{{this.price}}</li>
         <li>thumbnail:{{this.thumbnail}}</li>
         <li>stock:{{this.stock}}</li>
         <li>category:{{this.category}}</li>
-        <button id="AddCart" type="submit" onclick="addToCart({{this._id}})">Add To Cart</button>
+        <button type="button" onclick="addToCart('{{this._id}}')">Add To Cart</button>
     </ul>
     {{/each}}
 
@@ -25,4 +24,4 @@
   
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
-<script src="/scr/public/js/index.js"></script>
+<script src="/js/index.js"></script>

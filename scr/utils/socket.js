@@ -48,18 +48,5 @@ export function connectSocket(httpServer) {
             }
         })
 
-        socket.on("add_product", async(data)=>{
-            try{
-                const _id = parseInt(data);
-                const productAdd = await product.getProductByID(_id)
-                console.log(data)
-                await cart.addProductToCart("6494e71d6f254e090bcc0fd3", productAdd);
-
-                socketServer.emit("",)
-            }
-            catch{
-                console.log("error")
-            }
-        })
     });
 }
