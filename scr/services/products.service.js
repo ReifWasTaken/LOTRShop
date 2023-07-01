@@ -11,7 +11,7 @@ class ProductsService {
         const queryResults = await ProductModel.paginate(filter, {
         limit: limit || 3,
         page: pages || 1,
-        sort: sort || {},
+        sort: sort || {}, 
         lean: true,
       });
 
