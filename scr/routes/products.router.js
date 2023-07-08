@@ -10,12 +10,13 @@ productsRouter.get("/", async (req, res) => {
     const pages = req.query.page
     const sort = req.query.sort
     const query = req.query.query
-   
-  const {products, pagination} = await productService.getAllProducts(limit, pages, sort, query);
-  
-  if(products){
-    return res.status(200).render("products", {products, pagination});
-  }else{
+    
+    
+    const {products, pagination} = await productService.getAllProducts(limit, pages, sort, query);
+    
+    if(products){
+      return res.status(200).render("products", {products, pagination});
+    }else{
     res.status(200).json({ status: "success", payload: [] });
   }
 }

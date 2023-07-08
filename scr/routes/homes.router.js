@@ -25,6 +25,7 @@ homesRouter.get("/", async (req, res) => {
   }
 }
 catch(err){
+
   return  res.status(404).json({
     status: "error",
     msg: "Product List does not exist",
