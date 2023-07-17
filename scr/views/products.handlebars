@@ -1,7 +1,10 @@
 <div  id="product" >
+    {{#if users}}
+    <h1>Welcome: {{{users.firstName}}} {{{users.lastName}}}</h1>
+    {{/if}}
     {{#each products}}
     <ul>
-        <h1>Product: {{{this.title}}} </h1>
+        <h2>Product: {{{this.title}}} </h2>
         <li>description:{{this.description}}</li>
         <li>price:{{this.price}}</li>
         <li>thumbnail:{{this.thumbnail}}</li>
@@ -10,6 +13,8 @@
         <button type="button" onclick="addToCart('{{this._id}}')">Add To Cart</button>
     </ul>
     {{/each}}
+
+    <a href="/users/logout">Log Out</a>
 
     {{#if pagination.prevPage}}
     <a href="?page={{pagination.prevPage}}">⏪{{pagination.prevPage}}</a>

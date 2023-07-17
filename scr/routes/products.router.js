@@ -1,5 +1,6 @@
 import express from "express"
 import ProductsService from "../services/products.service.js";
+import  { UserModel }  from "../DAO/models/users.model.js";
 const productService = new ProductsService();
 const productsRouter = express.Router();
 
@@ -10,12 +11,16 @@ productsRouter.get("/", async (req, res) => {
     const pages = req.query.page
     const sort = req.query.sort
     const query = req.query.query
-    
+    const profileFound = req.session;
+
+    const userFound = await UserModel.findOne({email: profileFound.email})
     
     const {products, pagination} = await productService.getAllProducts(limit, pages, sort, query);
     
-    if(products){
-      return res.status(200).render("products", {products, pagination});
+    if(products && userFound){
+      console.log(userFound)
+
+      return res.status(200).render("products", {userFound, products, pagination});
     }else{
     res.status(200).json({ status: "success", payload: [] });
   }

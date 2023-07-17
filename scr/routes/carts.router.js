@@ -4,8 +4,6 @@ const cartServices = new CartService();
 const cartsRouter = express.Router();
 
 
-
-
 cartsRouter.post("/", async (req, res) => {
   try {
     const newCreation = await cartServices.cartCreation();

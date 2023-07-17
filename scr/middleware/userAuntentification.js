@@ -2,5 +2,12 @@ export function adminCheck(req, res, next){
     if(req.session?.admin){
         return next()
     }
-    return res.status(401).send("Autentication Error")
+    return res.status(403).send("Autentication Error")
+}
+
+export function validUser(req, res, next){
+    if(req.session?.email){
+        return next();
+    }
+    return res.status(401).render("error", {err: "autentication error"})
 }
