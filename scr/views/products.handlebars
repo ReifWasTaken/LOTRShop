@@ -1,7 +1,7 @@
 <div  id="product" >
-    {{#if users}}
-    <h1>Welcome: {{{users.firstName}}} {{{users.lastName}}}</h1>
-    {{/if}}
+    
+    <h1>Welcome: {{{cookie.firstName}}} {{{cookie.lastName}}} {{{cookie.role}}}</h1>
+
     {{#each products}}
     <ul>
         <h2>Product: {{{this.title}}} </h2>

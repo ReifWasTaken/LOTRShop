@@ -10,15 +10,22 @@ usersRouter.get("/login", (req, res)=>{
 
 usersRouter.post("/login", async(req, res)=>{
   try{
-  const {email, password} = req.body;
+  const {email, password, firstName, lastName, role} = req.body;
   
   const userFound = await UserModel.findOne({email: email})
 
-  if(userFound && userFound.password == password){
-    req.session.email = userFound.email;
-    req.session.isAdmin = userFound.isAdmin;
-    return res.redirect("/api/products")
+  if(!email || !password){
+    return res.status(400 ).render("error", {err: "invalid email or password"})
+  }
 
+  if(userFound && userFound.password == password){
+
+    req.session.email = email;
+    req.session.firstName = firstName;
+    req.session.lastName = lastName;
+    req.session.role = role;
+
+    return res.redirect("/api/products")
     }else{
     return res.status(401).render("error", {err: "invalid email or password"})
 
@@ -48,10 +55,32 @@ usersRouter.get("/logout", (req,res)=>{
   console.log(req?.session?.user, req?.session?.admin)
 })
 
-
- usersRouter.get("/register", (req, res)=>{
+usersRouter.get("/register", (req, res)=>{
   return res.render("register",{})
  })
+
+
+usersRouter.post("/register", async(req,res)=> {
+  try{
+      const {email, password, firstName, lastName, role} = req.body;
+
+      if(!email || !password || !firstName || !lastName){
+        return res.status(400 ).render("error", {err: "invalid data"})
+      }
+     await UserModel.create({email, password, firstName, lastName, role})
+
+     req.session.email = email;
+     req.session.firstName = firstName;
+     req.session.lastName = lastName;
+     req.session.role = role;
+
+     return res.redirect("/profile")
+  }
+  catch(err){
+    console.log(err)
+      return res.status(401).render("error", {err: "Error creating the account"}) 
+  }
+})
 
 /* usersRouter.get("/session", async (req, res)=>{
     try{

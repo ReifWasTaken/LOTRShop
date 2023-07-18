@@ -7,7 +7,8 @@ const usersSchema = new Schema({
     lastName: {type: String, requiered: true, max: 25},
     email: {type: String, requiered: true, unique: true, max: 100},
     password: {type: String, requiered: true, max: 20},
-    isAdmin: {type: Boolean, requiered: true},
+    role: {type: String, required: true, default: "user",
+    }
 
 });
 

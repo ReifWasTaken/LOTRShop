@@ -39,7 +39,7 @@ app.use("/profile", profileRouter)
 app.use("/", homesRouter)
 
 const httpServer = app.listen(port, () => {
-  console.log(`app listening from http://localhost:${port}/`)
+  console.log(`app listening from http://localhost:${port}/users/login`)
 });
 
 connectMongo();
