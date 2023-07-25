@@ -6,7 +6,7 @@ const profileRouter = express.Router()
 profileRouter.get("/", validUser, async(req,res)=> {
 try{
 
-    const profileFound = req.session;
+    const profileFound = req.session.user;
 
     const userFound = await UserModel.findOne({email: profileFound.email})
 

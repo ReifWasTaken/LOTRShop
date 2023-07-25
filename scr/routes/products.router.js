@@ -1,22 +1,23 @@
 import express from "express"
 import ProductsService from "../services/products.service.js";
-import  { UserModel }  from "../DAO/models/users.model.js";
+import { validUser } from "../middleware/userAuntentification.js";
 const productService = new ProductsService();
 const productsRouter = express.Router();
 
 //-------------------------------------------------------------------------------------------
-productsRouter.get("/", async (req, res) => {
+//TO DO get all user info via cookies. Now i can only get the email
+productsRouter.get("/", validUser, async (req, res) => {
   try{
     const limit = req.query.limit
     const pages = req.query.page
     const sort = req.query.sort
     const query = req.query.query
-    const cookie = req.session
+    const user = req.session.user
 
     const {products, pagination} = await productService.getAllProducts(limit, pages, sort, query);
     
     if(products){
-      return res.status(200).render("products", {cookie, products, pagination});
+      return res.status(200).render("products", {user, products, pagination});
     }
 }
 catch(err){

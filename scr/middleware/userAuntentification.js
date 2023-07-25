@@ -6,7 +6,7 @@ export function adminCheck(req, res, next){
 }
 
 export function validUser(req, res, next){
-    if(req.session?.email){
+    if(req.session?.user){
         return next();
     }
     return res.status(401).render("error", {err: "autentication error"})

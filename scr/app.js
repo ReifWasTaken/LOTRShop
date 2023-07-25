@@ -13,6 +13,8 @@ import { profileRouter } from "./routes/profiles.routher.js";
 import { productsRouter }  from "./routes/products.router.js";
 import { validUser } from "./middleware/userAuntentification.js";
 import { realTimeProductsRouter } from "./routes/realTimeProducts.router.js";
+import { iniPassport } from "./config/passport.config.js";
+import passport from "passport";
 
 const app = express();
 const port = 8080;
@@ -25,6 +27,10 @@ app.use(session({
   secret: "secreto",
   resave: true,
   saveUninitialized: true}))
+
+iniPassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.engine("handlebars", handlebars.engine());
 app.set("views", path.join(__dirname, "../views"));
