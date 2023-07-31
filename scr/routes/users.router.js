@@ -7,7 +7,10 @@ usersRouter.get("/login", (req, res)=>{
   return res.render("login",{})
  })
 
- 
+
+//-------------------------------------------------------------------------------------------
+
+
  usersRouter.post("/login",passport.authenticate('login', { failureRedirect: '/users/faillogin' }), async(req, res)=>{
     if (!req.user) {
       return res.json({ error: 'invalid credentials' });
@@ -32,6 +35,10 @@ usersRouter.get("/login", (req, res)=>{
     return res.json({ error: 'fail to login' });
   });
 
+
+//-------------------------------------------------------------------------------------------
+
+
 usersRouter.get("/logout", (req,res)=>{
   req.session.destroy((err)=> {
     if(err){
@@ -47,6 +54,9 @@ usersRouter.get("/logout", (req,res)=>{
 usersRouter.get("/register", (req, res)=>{
   return res.render("register",{})
  })
+
+
+//-------------------------------------------------------------------------------------------
 
 
 usersRouter.post("/register", passport.authenticate('register', { failureRedirect: '/users/failregister' }), async(req,res)=> {
@@ -72,6 +82,10 @@ usersRouter.post("/register", passport.authenticate('register', { failureRedirec
       return res.status(401).render("error", {err: "Error creating the account"}) 
   }
 })
+
+
+//-------------------------------------------------------------------------------------------
+
 
 usersRouter.get('/failregister', async (req, res) => {
   return res.json({ error: 'fail to register' });

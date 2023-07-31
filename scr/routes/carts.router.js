@@ -21,6 +21,10 @@ cartsRouter.post("/", async (req, res) => {
   }
 })
 
+
+//-------------------------------------------------------------------------------------------
+
+
 cartsRouter.get("/:cid", async (req, res) => {
   try {
     const solicitedID = req.params.cid;
@@ -46,6 +50,9 @@ cartsRouter.get("/:cid", async (req, res) => {
 
 })
 
+//-------------------------------------------------------------------------------------------
+
+
 cartsRouter.put("/:cid/product/:pid", async (req, res) => {
   try {
     const solicitedCartID = req.params.cid;
@@ -69,6 +76,10 @@ cartsRouter.put("/:cid/product/:pid", async (req, res) => {
   }
 });
 
+
+//-------------------------------------------------------------------------------------------
+
+
 cartsRouter.delete("/:cid/product/:pid", async (req, res) => {//si
   try {
     const solicitedCartID = req.params.cid;
@@ -90,6 +101,10 @@ cartsRouter.delete("/:cid/product/:pid", async (req, res) => {//si
     });
   }
 })
+
+
+//-------------------------------------------------------------------------------------------
+
 
 cartsRouter.put("/:cid", async (req, res) => {
   try {
@@ -114,6 +129,10 @@ cartsRouter.put("/:cid", async (req, res) => {
   }
 })
 
+
+//-------------------------------------------------------------------------------------------
+
+
 cartsRouter.put("/:cid/products/:pid", async (req, res) => {
   try {
     const solicitedCartID = req.params.cid;
@@ -137,6 +156,10 @@ cartsRouter.put("/:cid/products/:pid", async (req, res) => {
     });
   }
 });
+
+
+//-------------------------------------------------------------------------------------------
+
 
 cartsRouter.delete("/:cid", async (req, res) => {
   try {

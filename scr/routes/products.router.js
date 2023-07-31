@@ -5,7 +5,6 @@ const productService = new ProductsService();
 const productsRouter = express.Router();
 
 //-------------------------------------------------------------------------------------------
-//TO DO get all user info via cookies. Now i can only get the email
 productsRouter.get("/", validUser, async (req, res) => {
   try{
     const limit = req.query.limit
