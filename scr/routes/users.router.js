@@ -77,6 +77,4 @@ usersRouter.get('/failregister', async (req, res) => {
   return res.json({ error: 'fail to register' });
 });
 
-
-
 export { usersRouter };
