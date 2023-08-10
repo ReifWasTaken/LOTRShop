@@ -1,5 +1,7 @@
 import path from "path";
 import express from "express"
+import passport from "passport";
+import { Command } from "commander";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import handlebars from "express-handlebars";
@@ -15,7 +17,25 @@ import { profileRouter } from "./routes/profiles.routher.js";
 import { productsRouter }  from "./routes/products.router.js";
 import { validUser } from "./middleware/userAuntentification.js";
 import { realTimeProductsRouter } from "./routes/realTimeProducts.router.js";
-import passport from "passport";
+
+const program = new Command();
+
+program
+  .option("-d", "Debug variables", false)
+  .option("-p <port>", "Server Port", 8080)
+  .option("--mode <mode>", "Working mode", "production")
+  .requiredOption(
+    "-u <user>",
+    "app been used by user",
+    "User not declared"
+  )
+  .option("-l, --letters [letters...]", "specify letters");
+
+  program.parse();
+
+console.log("option", program.opts());
+console.log("valor de mode: ", program.opts().mode);
+console.log("datos no reconocibles: ", program.args)
 
 const app = express();
 const port = 8080;
