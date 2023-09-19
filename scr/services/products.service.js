@@ -1,64 +1,62 @@
-import { Error } from "mongoose";
-import { ProductModel } from "../DAO/models/products.model.js";
+import ProductsDAO from "../DAO/classes/producsDAO.model.js";
+const productsDAO = new ProductsDAO();
 
 
 class ProductsService {
-//-------------------------------------------------------------------------------------------
-    async getAllProducts(limit, pages, sort, query) {
 
-        const filter = query? { title: { $regex: query.prod, $options: "i" } }: {};
-
-        const queryResults = await ProductModel.paginate(filter, {
-        limit: limit || 3,
-        page: pages || 1,
-        sort: sort || {}, 
-        lean: true,
-      });
-
+    async getAllProducts(limit, pages, sort, query,) {
+        try{    
+        const queryResults = await productsDAO.getAllProducts(limit, pages, sort, query)
+        
         const {docs, ...rest} = queryResults;
-
+        
         let products = docs.map(doc =>{
             return{
-            _id: doc._id,
-            title: doc.title,
-            description: doc.description,
-            price: doc.price,
-            thumbnail: doc.thumbnail,
-            code: doc.code,
-            stock: doc.stock,
-            category: doc.category,}
-        })
-
+                _id: doc._id,
+                title: doc.title,
+                description: doc.description,
+                price: doc.price,
+                thumbnail: doc.thumbnail,
+                code: doc.code,
+                stock: doc.stock,
+                category: doc.category,}
+            })
         return {products, pagination: rest};
-    }
-
-//-------------------------------------------------------------------------------------------
-    async productsValidation(newProduct) {
-        if (
-            !newProduct.title ||
-            !newProduct.description ||
-            !newProduct.price ||
-            !newProduct.thumbnail ||
-            !newProduct.code ||
-            !newProduct.stock ||
-            !newProduct.category) {
-
-            console.log("Something is missing");
-
-            throw new Error("Something is missing");
         }
-    }
+        catch(err){
+            return { code: 400, result: { status: "error", message: "Error getting products" } };
+          }
+          }
 
 //-------------------------------------------------------------------------------------------
-    async productsCreation(newProduct) {
 
-        this.productsValidation(newProduct);
-
-        await ProductModel.create({ ...newProduct });
+    async productCreation(newProduct) {
+    try{ 
+      
+        await productsDAO.productCreation(newProduct)
 
         return newProduct;
     }
+    catch{
+        
+        return { code: 400, result: { status: "error", message: "Error creating the product" } };
+    }
+}
 
+//-------------------------------------------------------------------------------------------
+async getProductByID(solicitedID) {
+
+    try{
+    const productFound = await productsDAO.getProductByID(solicitedID);
+
+    return productFound;
+    }
+    catch{
+        
+        return { code: 400, result: { status: "error", message: "Error getting the product" } };
+    }
+    }
+ /*
 //-------------------------------------------------------------------------------------------
     async productsDelete(solicitedID) {
 
@@ -81,20 +79,9 @@ class ProductsService {
         if (solicitedID)
             await ProductModel.updateOne({ _id: solicitedID }, { ...newProduct });
     }
+*/
 
-//-------------------------------------------------------------------------------------------
-    async getProductByID(solicitedID) {
-
-        const productFound = await ProductModel.findById(solicitedID);
-
-        if (!productFound) {
-            throw new Error("Product do not exist");
-        }
-
-        return productFound;
-    }
 }
-
 
 
 export default ProductsService;

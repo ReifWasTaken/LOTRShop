@@ -18,7 +18,7 @@ import { productsRouter }  from "./routes/products.router.js";
 import { validUser } from "./middleware/userAuntentification.js";
 import { realTimeProductsRouter } from "./routes/realTimeProducts.router.js";
 
-const program = new Command();
+/* const program = new Command();
 
 program
   .option("-d", "Debug variables", false)
@@ -35,7 +35,7 @@ program
 
 console.log("option", program.opts());
 console.log("valor de mode: ", program.opts().mode);
-console.log("datos no reconocibles: ", program.args)
+console.log("datos no reconocibles: ", program.args) */
 
 const app = express();
 const port = 8080;
@@ -57,7 +57,7 @@ app.engine("handlebars", handlebars.engine());
 app.set("views", path.join(__dirname, "../views"));
 app.set("view engine", "handlebars");
 
-app.use("/api/products",validUser , productsRouter);
+app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 
 app.use("/realtimeproducts", realTimeProductsRouter);
