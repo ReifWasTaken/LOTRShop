@@ -1,5 +1,4 @@
-import mongoose from "mongoose";
-import ProductsService from "../services/products.service.js";
+import { ProductModel } from "../DAO/models/products.model.js";
 
 
 export const productsValidation = async (req, res, next) => {
@@ -20,5 +19,22 @@ export const productsValidation = async (req, res, next) => {
         return next()
     }
 }
-
 //-------------------------------------------------------------------------------------------
+
+export const productExist = async (req, res, next) => {
+
+    const solicitedID = req.params.pid; 
+    const newProduct =  req.body;
+
+    ProductModel.findById(solicitedID);
+
+    if (!solicitedID) {
+        return res.status(403).send("product do not exist")
+    }
+
+    if (newProduct._id) {
+        return res.status(406).send("Product's ID cant be updated");
+    }
+
+    return next();
+}

@@ -16,14 +16,14 @@ class ProductsDAO{
         
         return queryResults;
     }
+//-------------------------------------------------------------------------------------------
 
     async productCreation(newProduct){
 
         const productAdded = await ProductModel.create({...newProduct});
-
-        console.log(productAdded)
         return productAdded;
     }
+//-------------------------------------------------------------------------------------------
 
     async getProductByID(solicitedID){
 
@@ -35,6 +35,21 @@ class ProductsDAO{
 
     return productFound;
     }
+//-------------------------------------------------------------------------------------------
+async productsUpdate(solicitedID, newProduct){
+    
+    const productUpdated = await ProductModel.updateOne({ _id: solicitedID }, { ...newProduct });
+    
+    return productUpdated;
+}
+//-------------------------------------------------------------------------------------------
+
+async productDelete(solicitedID){
+
+    const product = await ProductModel.findByIdAndDelete(solicitedID);
+
+    return product;
+}
 }
 
 export default ProductsDAO;

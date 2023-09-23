@@ -1,184 +1,21 @@
 import express from "express";
-import CartService from "../services/carts.service.js";
-const cartServices = new CartService();
+import CartController from "../controllers/carts.controllers.js";
+const cartController = new CartController();
 const cartsRouter = express.Router();
 
 
-cartsRouter.post("/", async (req, res) => {
-  try {
-    const newCreation = await cartServices.cartCreation();
-    return res.status(201).json({
-      status: "success",
-      msg: "cart created",
-      data: newCreation,
-    });
-  }
-  catch (err) {
-    return res.status(400).json({
-      status: "error",
-      msg: "cart can not be created",
-    });
-  }
-})
+cartsRouter.post("/", cartController.cartsCreation)
 
+cartsRouter.get("/:cid", cartController.getCartByID)
 
-//-------------------------------------------------------------------------------------------
+cartsRouter.put("/:cid/product/:pid", cartController.addProductToCart);
 
+cartsRouter.delete("/:cid/product/:pid", cartController.removeProductFromCart)
 
-cartsRouter.get("/:cid", async (req, res) => {
-  try {
-    const solicitedID = req.params.cid;
+cartsRouter.put("/:cid", cartController.modifyCart)
 
-    const cartFound = await cartServices.getCartByID(solicitedID);
+cartsRouter.put("/:cid/products/:pid", cartController.modifyQuantity);
 
-    if (cartFound) {
-
-      return res.status(201).json({
-        status: "success",
-        msg: "Cart found succesfuly",
-        data: cartFound,
-      })
-    }
-
-  }
-  catch {
-    return res.status(404).json({
-      status: "error",
-      msg: "Cart does not exist",
-    });
-  }
-
-})
-
-//-------------------------------------------------------------------------------------------
-
-
-cartsRouter.put("/:cid/product/:pid", async (req, res) => {
-  try {
-    const solicitedCartID = req.params.cid;
-    const solicitedProductID = req.params.pid;
-
-    const carrito = await cartServices.addProductToCart(solicitedCartID, solicitedProductID);
-
-    return res.status(201).json({
-      status: "success",
-      msg: "cart updated",
-      data: carrito,
-    })
-
-  }
-  catch (err) {
-    console.log(err);
-    return res.status(404).json({
-      status: "error",
-      msg: "error adding the product to the cart",
-    });
-  }
-});
-
-
-//-------------------------------------------------------------------------------------------
-
-
-cartsRouter.delete("/:cid/product/:pid", async (req, res) => {//si
-  try {
-    const solicitedCartID = req.params.cid;
-    const solicitedProductID = req.params.pid;
-
-    const carrito = await cartServices.removeProductFromCart(solicitedCartID, solicitedProductID);
-
-    return res.status(201).json({
-      status: "success",
-      msg: "cart updated",
-      data: carrito,
-    })
-  }
-  catch (err) {
-    console.log(err);
-    return res.status(404).json({
-      status: "error",
-      msg: "error deleting cart product",
-    });
-  }
-})
-
-
-//-------------------------------------------------------------------------------------------
-
-
-cartsRouter.put("/:cid", async (req, res) => {
-  try {
-    const solicitedCartID = req.params.cid;
-    const toBeModify = req.body;
-
-    const cart = await cartServices.modifyCart(solicitedCartID, toBeModify);
-
-    return res.status(201).json({
-      status: "succes",
-      msg: "cart updated",
-      data: cart,
-    })
-
-  }
-  catch (err) {
-    console.log(err);
-    return res.status(404).json({
-      status: "error",
-      msg: "error modifying the cart",
-    });
-  }
-})
-
-
-//-------------------------------------------------------------------------------------------
-
-
-cartsRouter.put("/:cid/products/:pid", async (req, res) => {
-  try {
-    const solicitedCartID = req.params.cid;
-    const solicitedProductID = req.params.pid;
-    const solicitedQuantity = req.body.quantity;
-
-    const carrito = await cartServices.modifyQuantity(solicitedCartID, solicitedProductID, solicitedQuantity);
-
-    return res.status(201).json({
-      status: "success",
-      msg: "cart updated",
-      data: carrito,
-    })
-
-  }
-  catch (err) {
-    console.log(err);
-    return res.status(404).json({
-      status: "error",
-      msg: "error adding the product to the cart",
-    });
-  }
-});
-
-
-//-------------------------------------------------------------------------------------------
-
-
-cartsRouter.delete("/:cid", async (req, res) => {
-  try {
-    const solicitedCartID = req.params.cid;
-
-    const cart = await cartServices.deleteAllProducts(solicitedCartID);
-
-    return res.status(200).json({
-      status:"succes",
-      msg: "cart updated",
-      data: cart,
-    })
-  }
-  catch (err) {
-    return res.status(404).json({
-      status: "error",
-      msg: "error deleting the cart content",
-    });
-  }
-})
+cartsRouter.delete("/:cid", cartController.deleteAllProducts) 
 
 export { cartsRouter };

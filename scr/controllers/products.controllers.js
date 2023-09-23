@@ -24,8 +24,6 @@ class ProductsController{
     const productAdded = await productService.productCreation(newProduct);
    
     return res.status(201).json({
-      status: "succes",
-      msg: "producct added succesfully",
       data: productAdded,
     });
   }
@@ -38,13 +36,34 @@ class ProductsController{
         const productFound = await productService.getProductByID(solicitedID);
       
           return res.status(201).json({
-          status: "success",
-          msg: "Product info",
           data: productFound,
           });  
       }
   
 //-------------------------------------------------------------------------------------------
+    async productsUpdate(req, res){
+    const solicitedID = req.params.pid; 
+    const newProduct =  req.body;
+
+    const toBeUpdated = await productService.productsUpdate(solicitedID, newProduct);
+      
+      return res.status(201).json({
+        data: toBeUpdated
+      })
+    }
+  
+//-------------------------------------------------------------------------------------------
+
+async productDelete(req, res){
+
+    const solicitedID = req.params.pid; 
+    
+    const productFound = await productService.productDelete(solicitedID);
+    
+    return res.status(200).json({
+      data: productFound
+    });
+  }
  }
 
 export default ProductsController;

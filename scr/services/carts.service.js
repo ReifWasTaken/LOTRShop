@@ -2,112 +2,101 @@ import { Error } from "mongoose";
 import { cartModel } from "../DAO/models/carts.model.js";
 import ProductsService from "../services/products.service.js";
 import { ProductModel } from "../DAO/models/products.model.js";
+import CartsDAO from "../DAO/classes/cartsDAO.model.js";
 const productService = new ProductsService();
 
+const cartsDAO = new CartsDAO();
 
-class CartService {
 
-    async cartCreation(){
-        const newCreation = await cartModel.create({});
-        return newCreation;
+class CartsService {
+    
+    async cartsCreation(){
+        try{
+          const newCreation = cartsDAO.cartsCreation();
+          return newCreation;
+           }
+        catch{
+          return { code: 400, result: { status: "error", message: "Error creating the cart" } }; 
+        }
     }
+
 //-------------------------------------------------------------------------------------------
 
     async getCartByID(solicitedID){
-        const cartFound = await cartModel.findById(solicitedID).populate("products.productId")
+        try{
+            const cart = await cartsDAO.getCartByID(solicitedID)
 
-        if(!cartFound){
-            throw new Error("Cart not exist");
+            return cart;
         }
-
-        return cartFound;
+        catch{
+            return {code: 400, result: {status:"error", massage: "Cart does not exist"}};
+        }
     }
 //-------------------------------------------------------------------------------------------
 
     async addProductToCart(solicitedCartID, solicitedProductID){
+        try{
+            const productAdded = await cartsDAO.addProductToCart(solicitedCartID, solicitedProductID);
 
-        const cartFound = await cartModel.findById({_id: solicitedCartID});
-
-        if(!cartFound){
-            throw new Error("Cart not found");
+            return productAdded;
         }
-
-        const productFound = await ProductModel.findById({_id: solicitedProductID});
-        
-        if(!productFound){
-            throw new Error("Product not found");
+        catch(err){
+            console.log(err)
+            return {code: 400, result: {status: "error", massage: "Cant add the product"}};
         }
-
-        const index = cartFound.products.findIndex(prod => prod.productId._id.toString() === solicitedProductID);
-        
-        if(index === -1){
-        cartFound.products.push({productId: productFound._id})
-        return await cartFound.save();
-        }
-        
-
-        cartFound.products[index].quantity +=1;
-        return await cartFound.save();
-
     }
 //-------------------------------------------------------------------------------------------
 
     async removeProductFromCart(solicitedCartID, solicitedProductID){
-        const cartFound = await cartModel.findOne({_id: solicitedCartID});
+        try{
+            const productRemoved = await cartsDAO.removeProductFromCart(solicitedCartID, solicitedProductID)
 
-        if(!cartFound){
-            throw new Error("Cart not found");
+            return productRemoved;
         }
-
-        const index = await cartFound.products.findIndex(products => products.productId._id.toString() === solicitedProductID);
-        
-        cartFound.products.splice(index, 1)
-        const updateCart = await cartModel.updateOne({_id: solicitedCartID}, cartFound);
-        return updateCart;
-        
-
+        catch{
+            return {code: 400, result: {status: "error", massage: "Cant remove the product"}};
+        }
     }
-//-------------------------------------------------------------------------------------------
-
+    //-------------------------------------------------------------------------------------------
+    
     async modifyCart(solicitedCartID, toBeModify){   
-        
-        const cartFound = await cartModel.findByIdAndUpdate(solicitedCartID, {$unset: {productId: 1}}, {new: true})
-
-        if(!cartFound){
-            throw new Error("Cart not found");
+        try{
+            
+            const cartModified = await cartsDAO.modifyCart(solicitedCartID, toBeModify)
+            return cartModified;
         }
-
-        let cartAux = toBeModify;
+        catch{
+            
+            return {code: 400, result: {status: "error", massage: "Cant modify the cart"}};
+        }
         
-        const updateCart = await cartModel.updateOne({_id: solicitedCartID}, cartAux);
-        return updateCart;
-
     }
-//-------------------------------------------------------------------------------------------
+    //-------------------------------------------------------------------------------------------
+    
+    async modifyQuantity(solicitedCartID, solicitedProductID, solicitedQuantity){
+        try{
+            
+            const updateCart = await cartsDAO.modifyQuantity(solicitedCartID, solicitedProductID, solicitedQuantity)
+            return updateCart;
+        }
+        catch{
 
-async modifyQuantity(solicitedCartID, solicitedProductID, solicitedQuantity){
-
-    const cartFound = await cartModel.findOne({_id: solicitedCartID}).populate("products.productId");
-
-    let prodCart = cartFound.products.find((item)=> item.productId._id.toString() === solicitedProductID)
-
-    prodCart.quantity = prodCart.quantity + solicitedQuantity;
-
-    const updateCart = await cartModel.updateOne({_id: solicitedCartID}, cartFound);
-    return updateCart;
- 
+            return {code: 400, result: {status: "error", massage: "Cant modify the cart"}};
+        }
+        
 }
 //-------------------------------------------------------------------------------------------
 
 async deleteAllProducts(solicitedCartID){
-
-    const cartFound = await cartModel.findOne({_id: solicitedCartID})
-
-    cartFound.products = []
-
-    const updateCart = await cartModel.updateOne({_id: solicitedCartID}, cartFound);
-    return updateCart;
+    try{
+        const updateCart = await cartsDAO.deleteAllProducts(solicitedCartID);
+        return updateCart;
+    }
+    catch(err){
+        console.log(err)
+        return {code: 400, result: {status: "error", massage: "Cant modify the cart"}};
+    }
+} 
 }
-}
 
-export default CartService;
+export default CartsService;

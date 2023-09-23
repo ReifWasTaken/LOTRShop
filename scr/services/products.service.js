@@ -56,30 +56,34 @@ async getProductByID(solicitedID) {
         return { code: 400, result: { status: "error", message: "Error getting the product" } };
     }
     }
- /*
 //-------------------------------------------------------------------------------------------
-    async productsDelete(solicitedID) {
 
-        const productFound = await ProductModel.deleteOne({ _id: solicitedID });
-
-        return productFound;
-    }
-
-//-------------------------------------------------------------------------------------------
     async productsUpdate(solicitedID, newProduct) {
+        try{
 
-        if (!solicitedID) {
-            throw new Error("Product does not exist");
+            const productUpdated = await productsDAO.productsUpdate(solicitedID, newProduct);
+            
+            return productUpdated;
         }
-
-        if (newProduct.id) {
-            throw new Error("Product's ID cant be updated");
+        catch{
+            return {code: 400, result: {status: "error", massage: "Error updating the product"} };
         }
-
-        if (solicitedID)
-            await ProductModel.updateOne({ _id: solicitedID }, { ...newProduct });
     }
-*/
+    
+    //-------------------------------------------------------------------------------------------
+    async productDelete(solicitedID) {
+        try{
+         
+            const prod = await productsDAO.productDelete(solicitedID);
+            
+            return (prod, "Product Deleted");
+        }
+     catch(err){  
+
+          return {code: 400, result: {status: "error", massage: "Error deleting the product"} };
+        }   
+    
+}
 
 }
 
