@@ -1,22 +1,17 @@
-async function createCart() {
-  const response = await fetch('/api/carts', {
-    method: 'post'
-  })
-  const body = await response.json()
-  return body.data
-}
-
 async function addToCart(pid) {
   try {
     
-    let carritoEnElLocalNoExiste = localStorage.getItem("cartId")
+    //get the cartID for the user logged in
+    const result = await fetch("/api/session/show/cart");
+    const data = await result.json();
+    if (!data.payload){
+      
+      return "Coudnt acces to your cart";
+    } 
+//if the fetch is successfull retrives the data and save the product
+    const cartID = data.payload;
 
-    if(!carritoEnElLocalNoExiste){
-    const auxCart = await createCart();
-    const idCart = auxCart._id
-    localStorage.setItem("cartId", JSON.stringify(auxCart));
-
-    const response = await fetch(`/api/carts/${idCart}/product/${pid}`, {
+    const response = await fetch(`/api/carts/${cartID}/product/${pid}`, {
       method: "PUT"
     });
 
@@ -26,29 +21,9 @@ async function addToCart(pid) {
       const errorData = await response.json();
       alert(errorData.error);
     }
-    }
-
-    if(carritoEnElLocalNoExiste){
-      const auxCart = localStorage.getItem("cartId")
-
-      const parsedCart = JSON.parse(auxCart)
-     
-      const idCart = parsedCart._id
-      
-      const response = await fetch(`/api/carts/${idCart}/product/${pid}`, {
-        method: "PUT"
-      });
-  
-         if (response.ok) {
-        alert('Producto agregado al carrito');
-      } else {
-        const errorData = await response.json();
-        alert(errorData.error);
-      }
-    }
-
+    
   } catch(err) {
-    console.log(err);
+    console.error('Error parsing JSON:', err);
   }
 }
 

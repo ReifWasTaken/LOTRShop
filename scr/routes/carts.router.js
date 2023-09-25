@@ -18,4 +18,6 @@ cartsRouter.put("/:cid/products/:pid", cartController.modifyQuantity);
 
 cartsRouter.delete("/:cid", cartController.deleteAllProducts) 
 
+cartsRouter.post("/:cid/purchase", cartController.purchase)
+
 export { cartsRouter };

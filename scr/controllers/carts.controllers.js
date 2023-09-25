@@ -1,4 +1,6 @@
 import CartsService from "../services/carts.service.js";
+import TicketServices from "../services/ticket.service.js";
+const ticketsServices = new TicketServices();
 const cartsServices = new CartsService();
 
 class CartController {
@@ -80,15 +82,27 @@ async modifyQuantity(req, res){
 //-------------------------------------------------------------------------------------------
 
 async deleteAllProducts(req, res) {
-
-    const solicitedCartID = req.params.cid;
-
+  
+  const solicitedCartID = req.params.cid;
+  
     const cart = await cartsServices.deleteAllProducts(solicitedCartID);
-
+    
     return res.status(200).json({
       data: cart,
     })
-  
+    
+  }
+//-------------------------------------------------------------------------------------------
+
+async purchase(req, res){
+  const solicitedCartID = req.params.cid;
+
+  const purchasedItems = await ticketsServices.purchase(solicitedCartID)
+
+  return res.status(200).json({
+    data: purchasedItems
+  })
+
 }
 }
 

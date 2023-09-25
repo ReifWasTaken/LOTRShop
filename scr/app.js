@@ -8,6 +8,7 @@ import handlebars from "express-handlebars";
 import { connectMongo } from "./utils/mongo.js";
 import { __dirname,  } from "./utils/dirname.js";
 import { connectSocket } from "./utils/socket.js";
+import { mailRouter } from "./routes/mail.router.js";
 import { usersRouter } from "./routes/users.router.js";
 import { cartsRouter } from "./routes/carts.router.js";
 import { homesRouter } from "./routes/homes.router.js";
@@ -47,6 +48,7 @@ app.use("/users", usersRouter)
 app.use("/profile", profileRouter)
 app.use("/api/session", sessionsRouter)
 app.use("/", homesRouter)
+app.use("/mail", mailRouter)
 
 const httpServer = app.listen(port, () => {
   console.log(`app listening from http://localhost:${port}/users/login`)

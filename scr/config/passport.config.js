@@ -3,6 +3,7 @@ import local from "passport-local";
 import { UserModel } from "../DAO/models/users.model.js";
 import { createHash, isValidPassword } from "../utils/bcrypt.js";
 import GitHubStrategy from "passport-github2";
+import { cartModel } from "../DAO/models/carts.model.js";
 const LocalStrategy = local.Strategy;
 
 export function iniPassport(){
@@ -42,13 +43,14 @@ export function iniPassport(){
                 console.log('User already exists');
                 return done(null, false);
               }
-              
+              const cartId = await cartModel.create({})
               const newUser = {
                 email,
                 firstName,
                 lastName,
                 role,
                 password: createHash(password),
+                cartId,
               };
               let userCreated = await UserModel.create(newUser);
               console.log(userCreated);
@@ -90,12 +92,14 @@ export function iniPassport(){
 
           let user = await UserModel.findOne({ email: profile.email });
           if (!user) {
+            const cartId = await cartModel.create({})
             const newUser = {
               email: profile.email,
               firstName: profile._json.name || profile._json.login || 'noname',
               lastName: 'nolast',
               role: "user",
               password: 'nopass',
+              cartId
             };
             let userCreated = await UserModel.create(newUser);
             console.log('User Registration succesful');

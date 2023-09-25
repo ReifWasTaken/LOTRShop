@@ -6,30 +6,28 @@ const usersRouter = express.Router();
 usersRouter.get("/login", (req, res)=>{
   return res.render("login",{})
  })
-
-
 //-------------------------------------------------------------------------------------------
-
 
  usersRouter.post("/login",passport.authenticate('login', { failureRedirect: '/users/faillogin' }), async(req, res)=>{
     if (!req.user) {
       return res.json({ error: 'invalid credentials' });
     }
-           
-
+    
      req.session.user = {  
 
       _id: req.user._id,
       email: req.user.email,
       firstName: req.user.firstName,
       lastName: req.user.lastName,
-      role: req.user.role
+      role: req.user.role,
+      cartId: req.user.cartId
 
     }      
     return res.redirect("/api/products")
       
     }
   )
+  //-------------------------------------------------------------------------------------------
   
   usersRouter.get('/faillogin', async (req, res) => {
     return res.json({ error: 'fail to login' });
@@ -47,9 +45,12 @@ usersRouter.get("/logout", (req,res)=>{
         body: err
       })
     }
+    res.clearCookie("connect.sid");
+    res.clearCookie("cartId");
     res.send("Logout OK")
   })
 })
+//-------------------------------------------------------------------------------------------
 
 usersRouter.get("/register", (req, res)=>{
   return res.render("register",{})
@@ -65,13 +66,16 @@ usersRouter.post("/register", passport.authenticate('register', { failureRedirec
       return res.json({ error: 'something went wrong' });
     }
 
+
+    
       req.session.user = {
         
         _id: req.user._id,
         email: req.user.email,
         firstName: req.user.firstName,
         lastName: req.user.lastName,
-        role: req.user.role
+        role: req.user.role,
+        cartId: req.user.cartId
 
       }
 
@@ -90,5 +94,6 @@ usersRouter.post("/register", passport.authenticate('register', { failureRedirec
 usersRouter.get('/failregister', async (req, res) => {
   return res.json({ error: 'fail to register' });
 });
+
 
 export { usersRouter };
