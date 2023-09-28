@@ -27,7 +27,7 @@ class ProductsDAO{
 
     async getProductByID(solicitedID){
 
-    const productFound = ProductModel.findById(solicitedID);
+    const productFound = ProductModel.findOne(solicitedID);
 
     if (!productFound) {
         throw new Error("Product do not exist");
@@ -38,7 +38,7 @@ class ProductsDAO{
 //-------------------------------------------------------------------------------------------
 async productsUpdate(solicitedID, newProduct){
     
-    const productUpdated = await ProductModel.updateOne({ _id: solicitedID }, { ...newProduct });
+    const productUpdated = await ProductModel.updateOne({ _id: solicitedID },  newProduct );
     
     return productUpdated;
 }

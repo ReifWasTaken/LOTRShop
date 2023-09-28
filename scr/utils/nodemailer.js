@@ -1,16 +1,15 @@
 import nodemailer from "nodemailer";
-import __dirname  from "./dirname";
-import dotenv from "dotenv"
-
-dotenv.config();
+import {__dirname}  from "./dirname.js";
+import { configDotenv } from "dotenv";
+configDotenv();
 
 const transport = nodemailer.createTransport({
-    service: "gmail",
+    service: "Gmail",
     port: 587,
     auth: {
         user: process.env.GOOGLE_EMAIL,
         pass: process.env.GOOGLE_PASS,
-    }
+    } 
 });
 
 export default transport;

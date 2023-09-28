@@ -1,6 +1,8 @@
 import express  from "express";
 import passport from "passport";
+import transport from "../utils/nodemailer.js";
 export const sessionsRouter = express.Router();
+
 
 sessionsRouter.get("/github", passport.authenticate("github", { scope: ["eser: email"]}));
 
@@ -14,22 +16,30 @@ sessionsRouter.get("/show", (req, res)=> {
 })
 
 sessionsRouter.get("/show/mail", (req, res)=> {
-    const userMail = req.session.user
-        userMail =  transport.sendMail({
-          from: process.env.GOOGLE_EMAIL,
-          to: userMail.email,
-          subject: "registration succesfull",
-          html: `
 
-          <div>
-          <H1>
-          WELCOME
-          </H1>
-          </div>
-          `,
-      })
+      if(req.session.user){
+            transport.sendMail({
+            from: process.env.GOOGLE_EMAIL,
+            to: req.session.user.email,
+            subject: "registration succesfull",
+            html: `
+            
+            <div> 
+            <H1>
+            WELCOME
+            </H1>
+            </div>
+            `,
+            
+        }) 
+     
+        return res.status(200).json({status: "success", message:"mail", payload: req.session.user.email})
+    }
+    else{
+        return res.status(400).json({ status: "error", message: "Mail not found" });
 
-      return res.status(200).json({status: "success", message:"mail", payload: userMail})
+    } 
+
 })
 
 sessionsRouter.get("/show/cart", (req, res)=> {

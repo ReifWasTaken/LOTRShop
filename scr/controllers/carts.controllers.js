@@ -1,3 +1,4 @@
+import { request, response } from "express";
 import CartsService from "../services/carts.service.js";
 import TicketServices from "../services/ticket.service.js";
 const ticketsServices = new TicketServices();
@@ -97,7 +98,9 @@ async deleteAllProducts(req, res) {
 async purchase(req, res){
   const solicitedCartID = req.params.cid;
 
-  const purchasedItems = await ticketsServices.purchase(solicitedCartID)
+  const purchaser =  req.session.user
+
+  const purchasedItems = await ticketsServices.purchase(solicitedCartID, purchaser)
 
   return res.status(200).json({
     data: purchasedItems

@@ -13,6 +13,7 @@ usersRouter.get("/login", (req, res)=>{
       return res.json({ error: 'invalid credentials' });
     }
     
+
      req.session.user = {  
 
       _id: req.user._id,
