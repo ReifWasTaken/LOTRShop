@@ -18,16 +18,21 @@ class ProductsDAO{
     }
 //-------------------------------------------------------------------------------------------
 
-    async productCreation(newProduct){
+    async productCreation(newProduct, ownsProduct){
 
         const productAdded = await ProductModel.create({...newProduct});
+
+
+
+        productAdded.owner = ownsProduct;
+
         return productAdded;
     }
 //-------------------------------------------------------------------------------------------
 
     async getProductByID(solicitedID){
 
-    const productFound = ProductModel.findOne(solicitedID);
+    const productFound = ProductModel.findById(solicitedID);
 
     if (!productFound) {
         throw new Error("Product do not exist");

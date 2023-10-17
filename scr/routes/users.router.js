@@ -1,100 +1,23 @@
 import express from "express";
 import passport from "passport";
+import { adminCheck, validUser } from "../middleware/userAuntentification.js";
+import UserController from "../controllers/users.controllers.js";
 const usersRouter = express.Router();
+const userController = new UserController()
 
-
-usersRouter.get("/login", (req, res)=>{
-  return res.render("login",{})
- })
-//-------------------------------------------------------------------------------------------
-
- usersRouter.post("/login",passport.authenticate('login', { failureRedirect: '/users/faillogin' }), async(req, res)=>{
-    if (!req.user) {
-      return res.json({ error: 'invalid credentials' });
-    }
-    
-
-     req.session.user = {  
-
-      _id: req.user._id,
-      email: req.user.email,
-      firstName: req.user.firstName,
-      lastName: req.user.lastName,
-      role: req.user.role,
-      cartId: req.user.cartId
-
-    }      
-    return res.redirect("/api/products")
-      
-    }
-  )
-  //-------------------------------------------------------------------------------------------
-  
-  usersRouter.get('/faillogin', async (req, res) => {
-    return res.json({ error: 'fail to login' });
-  });
-
-
-//-------------------------------------------------------------------------------------------
-
-
-usersRouter.get("/logout", (req,res)=>{
-  req.session.destroy((err)=> {
-    if(err){
-      return res.json({
-        status: "LogOut ERROR", 
-        body: err
-      })
-    }
-    res.clearCookie("connect.sid");
-    res.clearCookie("cartId");
-    res.send("Logout OK")
-  })
-})
-//-------------------------------------------------------------------------------------------
-
-usersRouter.get("/register", (req, res)=>{
-  return res.render("register",{})
- })
-
-
-//-------------------------------------------------------------------------------------------
-
-
-usersRouter.post("/register", passport.authenticate('register', { failureRedirect: '/users/failregister' }), async(req,res)=> {
-  try{
-    if (!req.user) {
-      return res.json({ error: 'something went wrong' });
-    }
-
-
-    
-      req.session.user = {
-        
-        _id: req.user._id,
-        email: req.user.email,
-        firstName: req.user.firstName,
-        lastName: req.user.lastName,
-        role: req.user.role,
-        cartId: req.user.cartId
-
-      }
-
-     return res.redirect("/profile")
-  }
-  catch(err){
-    console.log(err)
-      return res.status(401).render("error", {err: "Error creating the account"}) 
-  }
-})
-
-
-//-------------------------------------------------------------------------------------------
-
-
-usersRouter.get('/failregister', async (req, res) => {
-  return res.json({ error: 'fail to register' });
-});
+usersRouter.get("/login", userController.login)
+usersRouter.post("/login",passport.authenticate('login', { failureRedirect: '/api/users/faillogin' }), userController.userLogin)
+usersRouter.get('/faillogin', userController.failLogin);
+usersRouter.get("/logout", userController.logout)
+usersRouter.get("/register", userController.register)
+usersRouter.post("/register", passport.authenticate('register', { failureRedirect: '/api/users/failregister' }), userController.userRegister)
+usersRouter.get('/failregister', userController.failregister);
+usersRouter.get("/profile", validUser, userController.profile)
+usersRouter.get("/admpanel", adminCheck, userController.admpanel)
+usersRouter.get("/", validUser, userController.getAllUsers)
+usersRouter.delete("/", userController.innactiveUsers)
+usersRouter.put("/update/:uid", userController.updateToPremium)
+usersRouter.delete("/delete/:uid", userController.deleteUser)
 
 
 export { usersRouter };

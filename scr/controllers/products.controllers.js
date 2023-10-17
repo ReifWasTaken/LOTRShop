@@ -3,7 +3,7 @@ const productService = new ProductsService();
 
 class ProductsController{
 
-    async getAllProducts (req, res) {
+    async getAllProducts(req, res) {
       const limit = req.query.limit
       const pages = req.query.page
       const sort = req.query.sort
@@ -12,7 +12,12 @@ class ProductsController{
   
       const {products, pagination} = await productService.getAllProducts(limit, pages, sort, query);
 
-      return res.status(200).render("products", {user, products, pagination});
+      let isAdm = false;
+      
+      if(user.role != "user"){
+        isAdm = true;
+      }     
+      return res.status(200).render("products", {user, products, pagination, isAdm});
 
   }
 //-------------------------------------------------------------------------------------------
@@ -20,8 +25,9 @@ class ProductsController{
   async productCreation(req, res){
 
     const newProduct =  req.body;
+    const ownsProduct = req.session?.user?._id;
 
-    const productAdded = await productService.productCreation(newProduct);
+    const productAdded = await productService.productCreation(newProduct, ownsProduct);
    
     return res.status(201).json({
       data: productAdded,

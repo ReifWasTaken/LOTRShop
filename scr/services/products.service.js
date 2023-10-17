@@ -1,4 +1,7 @@
 import ProductsDAO from "../DAO/classes/producsDAO.model.js";
+import UserDAO from "../DAO/classes/usersDAO.model.js";
+import transport from "../utils/nodemailer.js";
+const userDAO = new UserDAO();
 const productsDAO = new ProductsDAO();
 
 
@@ -30,11 +33,11 @@ class ProductsService {
 
 //-------------------------------------------------------------------------------------------
 
-    async productCreation(newProduct) {
+    async productCreation(newProduct, ownsProduct) {
     try{ 
       
-        await productsDAO.productCreation(newProduct)
-
+        await productsDAO.productCreation(newProduct, ownsProduct)
+        
         return newProduct;
     }
     catch{
@@ -72,19 +75,33 @@ async getProductByID(solicitedID) {
     
     //-------------------------------------------------------------------------------------------
     async productDelete(solicitedID) {
-        try{
-         
-            const prod = await productsDAO.productDelete(solicitedID);
-            
-            return (prod, "Product Deleted");
+
+        const product = await productsDAO.getProductByID(solicitedID);
+        const productOwner = product.owner;
+        const owner = await userDAO.findById(productOwner);   
+        await productsDAO.productDelete(solicitedID);
+
+
+        if (owner.role != "admin") {
+            if (owner.role === "premium") {
+                transport.sendMail({
+                    from: "LOTRShop <gregodelgado182@gmail.com>",
+                    to: owner.email,
+                    subject: "product deleted",
+                    html: `<p>The product ${product.title} has been deleted.</p>`,
+                });
+            }
+        }
+        return {
+            code: 200,
+            result: { status: "success", message: "Product deleted successfully", payload: product },
+        };
         }
      catch(err){  
 
           return {code: 400, result: {status: "error", massage: "Error deleting the product"} };
         }   
     
-}
-
 }
 
 

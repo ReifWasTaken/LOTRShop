@@ -1,5 +1,5 @@
 import express from "express"
-import { validUser } from "../middleware/userAuntentification.js";
+import { adminCheck, validUser } from "../middleware/userAuntentification.js";
 import ProductsController  from "../controllers/products.controllers.js";
 import { productsValidation, productExist } from "../middleware/productsMiddleware.js";
 

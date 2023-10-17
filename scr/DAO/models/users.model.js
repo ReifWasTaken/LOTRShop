@@ -9,6 +9,7 @@ const usersSchema = new Schema({
     password: {type: String, requiered: true, max: 20},
     role: {type: String, required: true, default: "user",},
     cartId: { type: Schema.Types.ObjectId, ref: "carts", required: true, unique: true },
+    lastConection: {type: Date, default: Date.now()},
     
 });
 

@@ -1,4 +1,3 @@
-import { request, response } from "express";
 import CartsService from "../services/carts.service.js";
 import TicketServices from "../services/ticket.service.js";
 const ticketsServices = new TicketServices();

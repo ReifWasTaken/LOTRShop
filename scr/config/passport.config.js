@@ -4,6 +4,7 @@ import { UserModel } from "../DAO/models/users.model.js";
 import { createHash, isValidPassword } from "../utils/bcrypt.js";
 import GitHubStrategy from "passport-github2";
 import { cartModel } from "../DAO/models/carts.model.js";
+import transport from "../utils/nodemailer.js";
 const LocalStrategy = local.Strategy;
 
 export function iniPassport(){
@@ -55,6 +56,20 @@ export function iniPassport(){
               let userCreated = await UserModel.create(newUser);
               console.log(userCreated);
               console.log('User Registration succesful');
+
+              await transport.sendMail({
+                from: "LOTRShop <gregodelgado182@gmail.com>",
+                to: newUser.email,
+                subject: "registration succesfull",
+                html: `
+                
+                <div> 
+                <H1>
+                WELCOME TO LOTRshop
+                </H1>
+                </div>
+                `,})
+
               return done(null, userCreated);
             } catch (e) {
               console.log('Error in register');

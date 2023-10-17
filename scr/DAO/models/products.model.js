@@ -10,6 +10,7 @@ const producsSchema = new Schema({
     code:{type: String, requiered: true, max: 100, unique: true},
     stock:{type: Number, requiered: true, max: 20},
     category:{type: String, requiered: true, max: 100},
+    owner: { type: Schema.Types.ObjectId, ref: "users", required: true, unique: true },
 
 });
 

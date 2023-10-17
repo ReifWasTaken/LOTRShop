@@ -1,0 +1,13 @@
+<h1>USERS</h1>
+
+{{#each users}}
+<ul>
+    <li>name: {{this.firstName}} {{this.lastName}}<br></li>
+    <li>user: {{this.email}} <br></li>
+    <li>role: {{this.role}} <br></li>
+<br>
+
+</ul>
+{{/each}}
+<a href="/api/products">Products</a>
+<a href="/api/users/logout">Log Out</a>
