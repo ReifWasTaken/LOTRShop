@@ -1,6 +1,7 @@
 import CartsDAO from "../DAO/classes/cartsDAO.model.js";
 import ProductsDAO from "../DAO/classes/producsDAO.model.js";
 import ticketsDao from "../DAO/classes/ticketDAO.model.js";
+import transport from "../utils/nodemailer.js";
 
 const productsDAO = new ProductsDAO();
 const cartDAO = new CartsDAO();
@@ -8,7 +9,7 @@ const cartDAO = new CartsDAO();
 class TicketServices{
   
   async purchase(solicitedCartID, purchaser){
-   purchaser = "gregodelgado182@gmail.com"
+
     try{ 
       const cart = await cartDAO.getCartByID(solicitedCartID)
       if (cart.products.length < 1) return { code: 404, result: { status: "empty", message: "Cart is empty" } };
@@ -40,8 +41,18 @@ class TicketServices{
       }
       //generate the ticket 
       
-      const ticket = await ticketsDao.createTicket(amount, purchaser);
+      const ticket = await ticketsDao.createTicket(amount, purchaser.email);
+
       
+      await transport.sendMail({
+        from: "LOTRShop <gregodelgado182@gmail.com>",
+        to: purchaser.email,
+        subject: "Purchased complete",
+        html: `<p>Congratulations your new acquisition. your purchased code is ${ticket.code} </p>`,
+      });
+      
+      
+
       return { code: 200, result: { status: "success", message: "Purchase successful", payload: ticket } };
     }
     catch(error){

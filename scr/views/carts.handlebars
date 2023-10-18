@@ -4,10 +4,22 @@
 
     {{#each products}}
     
+    <li>Name: {{this.productId.title}}</li>
+    <li>Quantity: {{this.quantity}}</li>
+    <li>price: ${{this.productId.price}}</li>
 
-    <li>ID: {{this.id}}</li>
-    <li>Cantidad: {{this.quantity}}</li>
+    <br>
 
+  {{/each}}
     </ul>
-    {{/each}}
+  
 </div>
+<button type="button" onclick="purchase('{{_id}}')">Purcharse!</button>
+
+<br>
+<a href="/api/products">Products |</a>
+<a href="/api/users/profile">Profile |</a>
+<a href="/api/users/logout">Log Out |</a>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+<script src="/js/index.js"></script>

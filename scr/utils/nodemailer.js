@@ -10,5 +10,5 @@ const transport = nodemailer.createTransport({
         pass: process.env.GOOGLE_PASS,
     } 
 });
-
-export default transport;
+ 
+export default transport;  

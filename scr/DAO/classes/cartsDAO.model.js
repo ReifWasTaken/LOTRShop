@@ -6,12 +6,12 @@ class CartsDAO {
     async cartsCreation(){
         const newCart = await cartModel.create({});
 
-        return newCart;
+        return newCart; 
     }
 //-------------------------------------------------------------------------------------------
 
 async getCartByID(solicitedID){
-    const cartFound = await cartModel.findById(solicitedID).populate("products.productId")
+    const cartFound = await cartModel.findById(solicitedID).lean().populate("products.productId")
     
     if(!cartFound){
         throw new Error("Cart not exist");

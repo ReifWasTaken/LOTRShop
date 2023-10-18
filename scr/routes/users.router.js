@@ -17,7 +17,7 @@ usersRouter.get("/admpanel", adminCheck, userController.admpanel)
 usersRouter.get("/", validUser, userController.getAllUsers)
 usersRouter.delete("/", userController.innactiveUsers)
 usersRouter.put("/update/:uid", userController.updateToPremium)
-usersRouter.delete("/delete/:uid", userController.deleteUser)
+usersRouter.delete("/delete/:uid", userController.deleteUser) 
 
 
 export { usersRouter };

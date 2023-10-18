@@ -46,7 +46,7 @@ const httpServer = app.listen(port, () => {
   console.log(`app listening from http://localhost:${port}/api/users/login`)
 });
 
-connectMongo();
+connectMongo(); 
 
 connectSocket(httpServer);
 

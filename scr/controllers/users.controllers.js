@@ -95,7 +95,7 @@ class UserController{
 
     const users = await userServices.admpanel()
 
-    return res.status(200).render("adminManagment","users", {users})
+    return res.status(200).render("adminManagment", {users})
   }
 //-------------------------------------------------------------------------------------------
 async getAllUsers(req,res){

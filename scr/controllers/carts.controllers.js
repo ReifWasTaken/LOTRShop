@@ -23,9 +23,8 @@ class CartController {
       
           const cartFound = await cartsServices.getCartByID(solicitedID);
       
-            return res.status(201).json({
-              data: cartFound,
-            })
+          return res.status(200).render("carts", cartFound);
+
         }
 //-------------------------------------------------------------------------------------------
     async addProductToCart(req, res){
@@ -51,7 +50,7 @@ async removeProductFromCart(req, res){
   return res.status(201).json({
     data: carrito,
   })
-}
+}  
 //-------------------------------------------------------------------------------------------
 
 async modifyCart (req, res) {
@@ -102,6 +101,7 @@ async purchase(req, res){
   const purchasedItems = await ticketsServices.purchase(solicitedCartID, purchaser)
 
   return res.status(200).json({
+    
     data: purchasedItems
   })
 

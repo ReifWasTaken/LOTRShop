@@ -1,7 +1,6 @@
 async function addToCart(pid) {
   try {
     
-
     const result = await fetch("/api/session/show/cart");
     const data = await result.json();
     if (!data.payload){
@@ -84,5 +83,34 @@ async function deleteUser(uid){
     console.error(err);
   } 
 }
+
+async function myCart(cid){
+  try{
+    location.href=`/api/carts/${cid}`
+  }
+  catch(err) {
+    console.error(err);
+  }  
+}
+
+async function purchase(cid){
+  try{
+    const response = await fetch(`/api/carts/${cid}/purchase`, {
+      method: "POST"
+    });
+    
+    console.log(response)
+      if (response.ok) {
+        location.href=`/api/carts/${cid}/purchase`
+    } else {
+      const errorData = await response.json();
+      alert(errorData.error);
+    }
+  }
+  catch(err) {
+    console.error(err);
+  } 
+}
+
 
 

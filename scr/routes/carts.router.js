@@ -20,4 +20,6 @@ cartsRouter.delete("/:cid", cartController.deleteAllProducts)
 
 cartsRouter.post("/:cid/purchase", cartController.purchase)
 
+cartsRouter.get("/:cid/purchase", cartController.purchase)
+
 export { cartsRouter };

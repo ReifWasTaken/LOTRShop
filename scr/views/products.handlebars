@@ -1,6 +1,7 @@
 <div  id="product" >
     
-    <h1>Welcome: {{{user.firstName}}} {{{user.lastName}}} || Role: {{{user.role}}}</h1>
+    <h1>Welcome: {{{user.firstName}}} {{{user.lastName}}} || Role: {{{user.role}}} 
+    <button type="button" onclick="myCart('{{user.cartId}}')">Go to cart</button></h1>
 
     {{#if isAdm}}
     {{#each products}}
