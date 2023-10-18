@@ -41,7 +41,7 @@ class UserController{
                   body: err
                 })
               }
-              res.clearCookie("cartId");
+              
               res.render("logout", {});
             })
           
