@@ -5,9 +5,8 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "start": "node ./scr/app.js",
-    "dev": "nodemon ./scr/app.js --mode DEVELOPMENT",
-    "prod": "nodemon ./scr/app.js --mode PRODUCTION"
+    "start": "node ./scr/app.js --mode PRODUCTION",
+    "dev": "nodemon ./scr/app.js --mode DEVELOPMENT"
   },
   "repository": {
     "type": "git",
