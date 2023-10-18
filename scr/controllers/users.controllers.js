@@ -69,7 +69,7 @@ class UserController{
           
                 }
           
-               return res.redirect("/api/users")
+               return res.redirect("/api/products")
             }
             catch(err){
                 return res.status(401).render("error", {err: "Error creating the account"}) 
