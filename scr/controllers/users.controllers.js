@@ -43,7 +43,7 @@ class UserController{
               }
               res.clearCookie("connect.sid");
               res.clearCookie("cartId");
-              res.render("logout", {})
+              res.render("logout")
             })
           
     }
