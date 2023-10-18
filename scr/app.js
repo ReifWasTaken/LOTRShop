@@ -14,8 +14,6 @@ import { iniPassport } from "./config/passport.config.js";
 import { sessionsRouter } from "./routes/session.router.js";
 import { productsRouter }  from "./routes/products.router.js";
 
-console.log(config);
-
 const app = express();
 const port = 8080;
 
@@ -49,6 +47,11 @@ const httpServer = app.listen(port, () => {
 connectMongo(); 
 
 connectSocket(httpServer);
+
+app.get("/", (req, res)=>{
+
+  res.redirect("/api/users/login")
+})
 
 
 app.get("*", (req, res)=>{
