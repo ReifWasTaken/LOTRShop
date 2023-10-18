@@ -1,6 +1,4 @@
-
 import { Server } from "socket.io";
-import ProductManager from "../DAO/productManager.js";
 import ProductsService from "../services/products.service.js";
 import CartService from "../services/carts.service.js";
 
