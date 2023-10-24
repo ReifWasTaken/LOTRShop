@@ -8,7 +8,7 @@ const usersSchema = new Schema({
     email: {type: String, requiered: true, unique: true, max: 100},
     password: {type: String, requiered: true, max: 20},
     role: {type: String, required: true, default: "user",},
-    cartId: { type: Schema.Types.ObjectId, ref: "carts", required: true, unique: true },
+    cartId: { type: Schema.Types.ObjectId, ref: "carts", required: true},
     lastConection: {type: Date, default: Date.now()},
     
 });
